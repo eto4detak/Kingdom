@@ -36,7 +36,7 @@ public class MissionManager : MonoBehaviour
     {
         for (int i = 0; i < units.Count; i++)
         {
-            Unit enemy = UnityExtension.GetClosest(units[i].transform, UnitsManager.instance.playerUnits)
+            Unit enemy = UnityExtension.GetClosest(units[i].transform, UnitsManager.instance.builds)
                 as Unit;
             units[i].Command = new GuardCommand(units[i]);
         }

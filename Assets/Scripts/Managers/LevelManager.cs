@@ -3,13 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Events;
 
 public class LevelManager : Singleton<LevelManager>
 {
     public enum LevelState
     {
         Intro,
-        StartLevel,
+        LoadLevel,
         Building,
         Play,
         AllEnemiesSpawned,
@@ -19,9 +20,11 @@ public class LevelManager : Singleton<LevelManager>
 
     public float timer;
     public LevelData levelData;
+    public UnityEvent playLevel = new UnityEvent();
+
     public LevelState levelState { get; protected set; }
 
-    private void Awake()
+    protected override void Awake()
     {
         base.Awake();
         levelData = new LevelData()
@@ -73,15 +76,14 @@ public class LevelManager : Singleton<LevelManager>
         levelState = newState;
         switch (newState)
         {
-            case LevelState.StartLevel:
+            case LevelState.LoadLevel:
 
                 Debug.Log("StartLevel");
 
-                StartLevel();
+                SetFirstSettingsLevel();
                 break;
             case LevelState.Play:
                 Debug.Log("Play");
-
                 PlayLevel();
                 break;
             case LevelState.AllEnemiesSpawned:
@@ -103,9 +105,9 @@ public class LevelManager : Singleton<LevelManager>
         }
     }
 
-    private void StartLevel()
+    private void SetFirstSettingsLevel()
     {
-        ChangeLevelState(LevelState.StartLevel);
+        ChangeLevelState(LevelState.LoadLevel);
         GMode.instance.ContinueGame();
         GameHUD.instance.ViewLvlLabel(true);
         UnitsManager.instance.ChangeUnitsActivity(false);
@@ -115,6 +117,7 @@ public class LevelManager : Singleton<LevelManager>
     private void PlayLevel()
     {
         ChangeLevelState(LevelState.Play);
+        playLevel.Invoke();
         //SpawnPoint[] allSpawn = Resources.FindObjectsOfTypeAll<SpawnPoint>();
         //for (int i = 0; i < allSpawn.Length; i++) allSpawn[i].SetLoop(true);
         //MissionManager.instance.SetStartingPlayerTarget(list);
@@ -130,7 +133,7 @@ public class LevelManager : Singleton<LevelManager>
         UnitsManager.instance.EventPlayerDead.AddListener(GameOver);
         UnitsManager.instance.EvennEnemyDead.AddListener(GameComplate);
         UnitsManager.instance.ChangeUnitsActivity(true);
-        
+
     }
 
     public void GameComplate()

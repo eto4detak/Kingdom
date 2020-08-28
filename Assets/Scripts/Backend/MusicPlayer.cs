@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class MusicPlayer : MonoBehaviour
+public class MusicPlayer : Singleton<MusicPlayer>
 {
     [System.Serializable]
     public class Stem
@@ -10,26 +10,15 @@ public class MusicPlayer : MonoBehaviour
         public AudioClip clip;
         public float startingSpeedRatio;
     }
-    #region Singleton
-    static protected MusicPlayer s_Instance;
-    static public MusicPlayer instance { get { return s_Instance; } }
-    #endregion
     public UnityEngine.Audio.AudioMixer mixer;
     public Stem[] stems;
     public float maxVolume = 0.1f;
     private int numberSoundWinGame = 1;
     private int numberSoundOverGame = 2;
 
-    void Awake()
+    protected override void Awake()
     {
-        #region Singleton
-        if (s_Instance != null)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        s_Instance = this;
-        #endregion
+        base.Awake();
         Application.targetFrameRate = 30;
         AudioListener.pause = false;
     }

@@ -138,7 +138,7 @@ public class AIAttacker : AIUnit
     {
         if(target == null)
         {
-            target = UnityExtension.GetClosest(owner, UnitsManager.instance.playerUnits) as Unit;
+            target = UnityExtension.GetClosest(owner, UnitsManager.instance.builds) as Unit;
         }
         owner.Command = new FindEnemyCommand(owner);
     }

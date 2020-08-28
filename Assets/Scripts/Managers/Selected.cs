@@ -13,6 +13,10 @@ public class Selected : Singleton<Selected>
         characterLayer = LayerMask.GetMask("Character");
     }
 
+
+
+
+
     public void AddUnit(Unit added)
     {
         Formation form = FormationsManager.instance.FindFormation(added);
@@ -38,13 +42,21 @@ public class Selected : Singleton<Selected>
             AddUnit(units[i]);
         }
     }
+    public void TryFindSelect()
+    {
+        TrySelect();
 
+        if (selected.Count > 0)
+        {
+            TrailManager.instance.CreateTrail(MouseManager.instance.mouseHit);
+        }
+    }
 
     public void TrySelectUnits()
     {
         if (Tumbler.instance.state == TublerState.path)
         {
-            TrySelectUnit();
+            TrySelect();
 
             if (selected.Count > 0)
             {
@@ -91,7 +103,7 @@ public class Selected : Singleton<Selected>
         selected.Clear();
     }
 
-    public void TrySelectUnit()
+    public void TrySelect()
     {
         Unit tempSelected = null;
         selected.Clear();

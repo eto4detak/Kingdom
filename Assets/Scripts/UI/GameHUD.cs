@@ -5,7 +5,7 @@ using System;
 using TMPro;
 using UnityEngine.Events;
 
-public class GameHUD : MonoBehaviour
+public class GameHUD : Singleton<GameHUD>
 {
     [Header("Images")]
     public GameObject frontImg;
@@ -36,21 +36,9 @@ public class GameHUD : MonoBehaviour
     public Button btnContinue;
     public TextMeshProUGUI lvlLabel;
 
-    #region Singleton
-    static protected GameHUD s_Instance;
-    static public GameHUD instance { get { return s_Instance; } }
-    #endregion
-
-    void Awake()
+    protected override void Awake()
     {
-        #region Singleton
-        if (s_Instance != null)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        s_Instance = this;
-        #endregion
+        base.Awake();
         if(btnStartBattle != null) btnStartBattle.onClick.AddListener(OnStartBattle);
         if(btnContinue != null) btnContinue.onClick.AddListener(OnContinueLevel);
     }
@@ -63,8 +51,8 @@ public class GameHUD : MonoBehaviour
 
     private void FixedUpdate()
     {
-        textPCount.text = UnitsManager.instance.playerUnits.Count.ToString();
-        textECount.text = UnitsManager.instance.enemyUnits.Count.ToString();
+        //textPCount.text = UnitsManager.instance.playerUnits.Count.ToString();
+        //textECount.text = UnitsManager.instance.enemyUnits.Count.ToString();
     }
 
 

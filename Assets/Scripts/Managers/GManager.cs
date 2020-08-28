@@ -9,7 +9,7 @@ public class GManager : MonoBehaviour
 
     void Start()
     {
-        LevelManager.instance.ChangeLevelState(LevelManager.LevelState.StartLevel);
+        LevelManager.instance.ChangeLevelState(LevelManager.LevelState.LoadLevel);
     }
 
 

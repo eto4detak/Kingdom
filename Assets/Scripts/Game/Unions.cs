@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Unions : MonoBehaviour
+public class Unions : Singleton<Unions>
 {
     [Serializable]
     public enum p_union
@@ -23,24 +23,6 @@ public class Unions : MonoBehaviour
 
     public List<p_unions> _Unions = new List<p_unions>();
 
-    #region Singleton
-    static protected Unions s_Instance;
-    static public Unions instance { get { return s_Instance; } }
-    #endregion
-
-    void Awake()
-    {
-        #region Singleton
-        if (s_Instance != null)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        s_Instance = this;
-        #endregion
-
-    }
-
     public bool CheckEnemies(Team _team1, Team _team2)
     {
         for (int i = 0; i < _Unions.Count; i++)
@@ -57,6 +39,7 @@ public class Unions : MonoBehaviour
         }
         return false;
     }
+
     public static bool CheckAllies(Team _team1, Team _team2)
     {
         if (_team1 == _team2) return true;

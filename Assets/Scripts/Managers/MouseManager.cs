@@ -1,7 +1,17 @@
 ﻿using System.Collections.Generic;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using UnityEngine.Events;
+using System;
+
+public enum FindTarget
+{
+    Select,
+    Point
+}
+
 
 public class MouseManager : Singleton<MouseManager>
 {
@@ -10,29 +20,58 @@ public class MouseManager : Singleton<MouseManager>
 
     private Vector2 startPos;
     private Vector2 endPos;
+
     private float timeOldClick;
     private float timeCheckDoubleClick = 0.3f;
     private float findRadius = 1.5f;
     private float minY = 0;
-    private int characterLayer;
+    private int selectedLayer;
     private int pathLayer;
+    private int pathLayerMask;
     private int noPathLayer;
     private bool dragMouse = false;
     private bool isDoubleClick = false;
+    private IEnumerator findType;
+    private UnityAction<Vector3?> findForOrigin;
 
 
     private void Start()
     {
-        characterLayer = LayerMask.GetMask("Character");
-        pathLayer = LayerMask.GetMask("Path") & ~LayerMask.GetMask("Character");
+        selectedLayer = LayerMask.GetMask("Selected");
+        pathLayerMask = LayerMask.NameToLayer("Path");
+        pathLayer = LayerMask.GetMask("Path") & ~LayerMask.GetMask("Selected");
         noPathLayer = LayerMask.GetMask("NoPath");
+        ChangeFind(FindTarget.Select);
     }
 
-    void FixedUpdate()
+    public void ChangeFind(FindTarget target, UnityAction<Vector3?> origin = null)
+    {
+        findForOrigin = origin;
+        if (findType != null)
+        {
+            StopCoroutine(findType);
+        }
+        switch (target)
+        {
+            case FindTarget.Select:
+                findType = StandartFind();
+                break;
+            case FindTarget.Point:
+                findType = PointFind();
+                break;
+            default:
+                break;
+        }
+        
+        StartCoroutine(findType);
+    }
+
+
+    public void LogicDragUnit()
     {
         if (Input.GetMouseButtonDown(0))
         {
-            DownMouse();
+            TrySelect();
         }
 
         if (Input.GetMouseButtonUp(0))
@@ -46,13 +85,61 @@ public class MouseManager : Singleton<MouseManager>
         }
     }
 
-    private void DownMouse()
+    private IEnumerator StandartFind()
+    {
+        while (true)
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                if (!IsPointerOverUIObject())
+                {
+                    TrySelect();
+                }
+            }
+            yield return null;
+        }
+    }
+
+    private IEnumerator PointFind()
+    {
+        while (true)
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                if (!IsPointerOverUIObject())
+                {
+                    Vector3? dd = GetHitPoint();
+                    findForOrigin.Invoke(dd);
+                    ChangeFind(FindTarget.Select);
+                }
+            }
+            yield return null;
+        }
+    }
+
+    private void TrySelect()
     {
         dragMouse = true;
         mousePath = new List<Vector3>();
-        DoMouseHit(characterLayer);
-        Selected.instance.TrySelectUnits();
+        DoMouseHit(-1);
+        if(mouseHit.collider != null)
+        {
+            var selected = mouseHit.collider.GetComponent<ISelected>();
+            if (selected != null)
+            {
+                selected.Select();
+            }
+            else if(mouseHit.collider.gameObject.layer == pathLayerMask)
+            {
+                SelectedPanel.instance.ClearDisplay();
+            }
+        }
+    }
 
+    private Vector3 GetHitPoint()
+    {
+        DoMouseHit(-1);
+        return mouseHit.point;
     }
 
     private void UpMouse()
@@ -97,8 +184,6 @@ public class MouseManager : Singleton<MouseManager>
         mousePath.Clear();
     }
 
-
-
     public void DoMouseHit(int layout)
     {
         Ray mouseRay = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -122,7 +207,7 @@ public class MouseManager : Singleton<MouseManager>
             Ray mouseRay = Camera.main.ScreenPointToRay(Input.mousePosition);
             Unit unitTarget;
             
-            if (Physics.Raycast(mouseRay, out RaycastHit mouseHit, 100, characterLayer))
+            if (Physics.Raycast(mouseRay, out RaycastHit mouseHit, 100, selectedLayer))
             {
                 //attack
                 unitTarget = mouseHit.collider.GetComponent<Unit>();
@@ -143,8 +228,6 @@ public class MouseManager : Singleton<MouseManager>
         }
     }
 
-
-
     private void OnClickRightObject(Unit target, Vector3 hitPoint)
     {
         Unit selected = UnitsManager.instance.GetClosestFreePlayerUnit(hitPoint);
@@ -160,3 +243,7 @@ public class MouseManager : Singleton<MouseManager>
     }
 }
 
+class PointUnityEvent : UnityEvent<Vector3?>
+{
+    public Vector3 point;
+}

@@ -78,7 +78,7 @@ public class CharacterContrMovement : MonoBehaviour, IMovable
     {
         float min = 0.001f;
         run = MoveVector.magnitude > min;
-        if(animator != null) animator.SetBool(hashRun, run);
+        //if(animator != null) animator.SetBool(hashRun, run);
         MoveVector = MoveVector.normalized / 10 * speed;
 
         if (Vector3.Angle(Vector3.forward, MoveVector) > 1f || Vector3.Angle(Vector3.forward, MoveVector) == 0)

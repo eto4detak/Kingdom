@@ -21,7 +21,7 @@ public class Unit : MonoBehaviour, IMovable, IAttack, IUnit
     public CharacterAttack Armament { get; private set; }
     public CharacterCommand Command { get; set; }
 
-    private void Awake()
+    protected void Awake()
     {
         Armament = GetComponent<CharacterAttack>();
         movement = GetComponent<CharacterContrMovement>();
@@ -30,24 +30,20 @@ public class Unit : MonoBehaviour, IMovable, IAttack, IUnit
         characteristic = new Characteristic(sourse);
     }
 
-    private void Start()
+    protected void Start()
     {
         EventStart.Invoke(this);
         health?.EventDie.AddListener(OnDie);
         Command = new GuardCommand(this);
     }
 
-    private void FixedUpdate()
+    protected void FixedUpdate()
     {
-        DoCommands();
-        UpdateCharacteristic();
-        if (bonusColor != 0)
+        if (Command != null)
         {
-            unitColor.SetColor((Armament.AttackType.bonusDamage + health.bonusArmor) / bonusColor);
+            Command.DoCommand();
         }
-        unitColor.UpdateColor();
     }
-
 
     public void AddBonus(IBonus bonus)
     {
@@ -68,20 +64,6 @@ public class Unit : MonoBehaviour, IMovable, IAttack, IUnit
         Armament.enabled = active;
     }
 
-    private void UpdateCharacteristic()
-    {
-        Armament.AttackType.bonusDamage = characteristic.GetBonus(TypeBonus.Attack).value;
-
-        health.bonusArmor = characteristic. GetBonus(TypeBonus.Armor).value;
-    }
-
-    private void DoCommands()
-    {
-        if(Command != null)
-        {
-            Command.DoCommand();
-        }
-    }
 
     public void PushCommand(CharacterCommand _command)
     {
@@ -218,7 +200,7 @@ public class Unit : MonoBehaviour, IMovable, IAttack, IUnit
         psSelected.Play();
     }
 
-    private void OnDie()
+    protected void OnDie()
     {
         GetComponent<CharacterController>().enabled = false;
         GetComponent<CharacterContrMovement>().enabled = false;
@@ -229,7 +211,11 @@ public class Unit : MonoBehaviour, IMovable, IAttack, IUnit
         FormationsManager.instance.DieUnit(this);
         Destroy(gameObject);
     }
-
+    protected void UpdateCharacteristic()
+    {
+        Armament.AttackType.bonusDamage = characteristic.GetBonus(TypeBonus.Attack).value;
+        health.bonusArmor = characteristic.GetBonus(TypeBonus.Armor).value;
+    }
 
 }
 

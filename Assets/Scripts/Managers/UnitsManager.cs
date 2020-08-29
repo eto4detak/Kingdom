@@ -14,7 +14,6 @@ public class UnitsManager : Singleton<UnitsManager>
     }
     
     public List<Locality> localities = new List<Locality>();
-    public List<Unit> enemyUnits = new List<Unit>();
     public UnityEvent EventPlayerDead = new UnityEvent();
     public UnityEvent EvennEnemyDead = new UnityEvent();
     
@@ -171,10 +170,10 @@ public class UnitsManager : Singleton<UnitsManager>
     public List<Unit> GetEnemyUnit(UnitType find)
     {
         List<Unit> units = new List<Unit>();
-        for (int i = 0; i < enemyUnits.Count; i++)
-        {
-            if (enemyUnits[i].Armament.AttackType.GetUnitType() == find) units.Add(enemyUnits[i]);
-        }
+        //for (int i = 0; i < enemyUnits.Count; i++)
+        //{
+        //    if (enemyUnits[i].Armament.AttackType.GetUnitType() == find) units.Add(enemyUnits[i]);
+        //}
         return units;
     }
 

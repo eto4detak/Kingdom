@@ -60,7 +60,16 @@ public class GameUnit : MonoBehaviour, ISelected
         cites.Remove((Locality) this);
         cites.RemoveAll(x => x.culture.cults[0].name != culture.cults[0].name);
         Locality closest = transform.GetClosestT(cites);
-        team = closest.team;
+        if (closest)
+        {
+            team = closest.team;
+        }
+        else
+        {
+
+            Debug.Log("error closest " + cites.Count);
+
+        }
     }
 
     public void Select()

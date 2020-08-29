@@ -12,11 +12,12 @@ public class Village : Locality
 
     public void CreateImmigrants()
     {
-        int minPeople = 40;
-        int countImmigrants = 20;
-        if (People < minPeople) return;
+        int minPeople = 20;
+        int immigra = 20;
+        if (People < minPeople + immigra) return;
 
-        People -= countImmigrants;
+        People -= immigra;
+        culture.ChangeCulture(-immigra);
         var prefab = GetPrefab<Immigrants>();
         Immigrants immigrants = Instantiate(prefab, transform.position, Quaternion.identity);
         immigrants.Setup(this);
@@ -27,7 +28,7 @@ public class Village : Locality
     {
         float dev = 1f;
         People += (int)dev;
-        culture.Development(dev);
+        culture.ChangeCulture(dev);
     }
 
 }

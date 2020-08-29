@@ -11,51 +11,13 @@ public class SelectedPanel : Singleton<SelectedPanel>
     public Text txtName;
     public TextMeshProUGUI txtPeople;
     public TextMeshProUGUI txtGold;
-    public Button btnItem;
+    public Button potencialItem;
+    public CultItem cultItem;
     public GameUnit origin;
     public List<Button> allPotoncial = new List<Button>();
+    public List<CultItem> allCults = new List<CultItem>();
 
     private UnityAction selectedPotencial;
-
-
-    public void TrySelect(GameUnit obj, Team self)
-    {
-        ClearDisplay();
-        origin = obj;
-
-        if (Unions.instance.CheckAllies(self, origin.team))
-        {
-            CreateBtnPotentials();
-        }
-        origin.changed.AddListener(UpdateDisplay);
-        UpdateDisplay();
-    }
-
-    public bool IsSelected()
-    {
-        return origin != null;
-    }
-
-    public void ClickForOrigin(Vector3 clickPosition)
-    {
-        selectedPotencial();
-    }
-
-    public void CreateBtnPotentials()
-    {
-        float height = 45f;
-
-        for (int i = 0; i < origin.availablePotential.Count; i++)
-        {
-            Button btnPotencial = Instantiate(btnItem, transform);
-            btnPotencial.GetComponentInChildren<Text>().text = origin.availablePotential[i].name;
-            btnPotencial.onClick.AddListener(origin.availablePotential[i].start);
-            btnPotencial.transform.position += Vector3.down * i * height;
-            allPotoncial.Add(btnPotencial);
-            btnPotencial.gameObject.SetActive(true);
-            if (i == 0) selectedPotencial = origin.availablePotential[0].start;
-        }
-    }
 
     public void ClearDisplay()
     {
@@ -66,16 +28,68 @@ public class SelectedPanel : Singleton<SelectedPanel>
             txtName.text = "";
             txtPeople.text = "";
             txtGold.text = "";
-
+            ClearCults();
             ClearPotencial();
         }
     }
+
+    public void TrySelect(GameUnit obj, Team self)
+    {
+        ClearDisplay();
+        origin = obj;
+
+        origin.changed.AddListener(UpdateDisplay);
+        UpdateDisplay();
+    }
+
+    protected void CreateCults()
+    {
+        float distance = 45f;
+        
+        for (int i = 0; i < origin.culture.cults.Count; i++)
+        {
+            var item = Instantiate(cultItem, cultItem.transform.parent);
+            item.sName.text = origin.culture.cults[i].name.ToString();
+            item.percent.text =  ((int)origin.culture.cults[i].val).ToString();
+            //cult.img
+
+            item.transform.position += Vector3.down * i * distance;
+            allCults.Add(item);
+            item.gameObject.SetActive(true);
+        }
+    }
+
+    protected void CreatePotentials()
+    {
+        float distance = 45f;
+
+        for (int i = 0; i < origin.availablePotential.Count; i++)
+        {
+            Button btnPotencial = Instantiate(potencialItem, potencialItem.transform.parent);
+            btnPotencial.GetComponentInChildren<Text>().text = origin.availablePotential[i].name;
+            btnPotencial.onClick.AddListener(origin.availablePotential[i].start);
+            btnPotencial.transform.position += Vector3.down * i * distance;
+            allPotoncial.Add(btnPotencial);
+            btnPotencial.gameObject.SetActive(true);
+            if (i == 0) selectedPotencial = origin.availablePotential[0].start;
+        }
+    }
+
+
 
     protected void UpdateDisplay()
     {
         txtName.text = origin.MyName;
         txtPeople.text = origin.People.ToString();
         txtGold.text = origin.Gold.ToString();
+
+        if (Unions.instance.CheckAllies(Team.Player1, origin.team))
+        {
+            ClearCults();
+            CreateCults();
+            ClearPotencial();
+            CreatePotentials();
+        }
     }
 
     protected void ClearPotencial()
@@ -86,5 +100,14 @@ public class SelectedPanel : Singleton<SelectedPanel>
             Destroy(allPotoncial[i].gameObject);
         }
         allPotoncial.Clear();
+    }
+
+    protected void ClearCults()
+    {
+        for (int i = 0; i < allCults.Count; i++)
+        {
+            Destroy(allCults[i].gameObject);
+        }
+        allCults.Clear();
     }
 }

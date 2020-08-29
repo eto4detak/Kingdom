@@ -62,7 +62,6 @@ public class AIManager : Singleton<AIManager>
 
     public void Statistic()
     {
-        superiority = UnitsManager.instance.enemyUnits.Count - UnitsManager.instance.localities.Count;
         meleePlayerCount = UnitsManager.instance.GetPlayerUnit(UnitType.melee).Count;
         archerPlayerCount = UnitsManager.instance.GetPlayerUnit(UnitType.archer).Count;
         cavaleryPlayerCount = UnitsManager.instance.GetPlayerUnit(UnitType.cavalery).Count;

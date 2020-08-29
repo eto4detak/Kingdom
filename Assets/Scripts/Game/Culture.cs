@@ -32,7 +32,8 @@ public class Culture : MonoBehaviour
     public List<Cult> cults = new List<Cult>();
     public UnityEvent changed = new UnityEvent();
 
-    public void Development(float dev)
+
+    public void ChangeCulture(float val)
     {
         float totalCult = 0;
         for (int i = 0; i < cults.Count; i++)
@@ -42,9 +43,8 @@ public class Culture : MonoBehaviour
         if (totalCult == 0) return;
         for (int i = 0; i < cults.Count; i++)
         {
-            cults[i].val += dev * (cults[i].val / totalCult);
+            cults[i].val += val * (cults[i].val / totalCult);
         }
-        
     }
 
     public void Merger(Culture newCulture)

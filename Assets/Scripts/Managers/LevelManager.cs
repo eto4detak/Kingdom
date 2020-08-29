@@ -118,17 +118,9 @@ public class LevelManager : Singleton<LevelManager>
     {
         ChangeLevelState(LevelState.Play);
         playLevel.Invoke();
-        //SpawnPoint[] allSpawn = Resources.FindObjectsOfTypeAll<SpawnPoint>();
-        //for (int i = 0; i < allSpawn.Length; i++) allSpawn[i].SetLoop(true);
-        //MissionManager.instance.SetStartingPlayerTarget(list);
-        //MissionManager.instance.SetStartingTarget(new List<CharacterManager>(UnitsManager.instance.enemyUnits));
+
         MouseManager.instance.enabled = true;
-        AIUnit tempAI;
-        for (int i = 0; i < UnitsManager.instance.enemyUnits.Count; i++)
-        {
-            tempAI = UnitsManager.instance.enemyUnits[i].GetComponent<AIUnit>();
-            if (tempAI != null) tempAI.StartCommand();
-        }
+
         GameHUD.instance.ViewLvlLabel(false);
         UnitsManager.instance.EventPlayerDead.AddListener(GameOver);
         UnitsManager.instance.EvennEnemyDead.AddListener(GameComplate);

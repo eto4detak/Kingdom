@@ -2,25 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GMode : MonoBehaviour
+public class GMode : Singleton<GMode>
 {
     private bool isPause;
     private bool isMute;
-    #region Singleton
-    static protected GMode s_Instance;
-    static public GMode instance { get { return s_Instance; } }
-    #endregion
 
-    void Awake()
+    protected override void Awake()
     {
-        #region Singleton
-        if (s_Instance != null)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        s_Instance = this;
-        #endregion
+        base.Awake();
         isMute = SaveLoad.GetInstance().pData.musicMute;
     }
 

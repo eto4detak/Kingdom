@@ -9,8 +9,9 @@ public class Immigrants : GameUnit
     public GameUnit home;
 
     private Vector3? moveTarget = null;
-    protected void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         AddPotential(new GameUnitInfo { name = "Move to", start = MoveTo });
     }
 
@@ -54,19 +55,18 @@ public class Immigrants : GameUnit
 
     protected void OnTriggerEnter(Collider other)
     {
-        if (home.gameObject == other.gameObject &&
-            state != UnitState.Back ) return;
-
         TryJoin(other);
     }
 
     public void TryJoin(Collider other)
     {
-        Build newHome = other.GetComponent<Build>();
+        if (home.gameObject == other.gameObject &&
+            state != UnitState.Back) return;
+
+        Locality newHome = other.GetComponent<Locality>();
         if (newHome != null)
         {
             newHome.JoinUnit(this);
-            Destroy(gameObject);
         }
     }
 

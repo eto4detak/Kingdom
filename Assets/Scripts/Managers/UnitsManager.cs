@@ -13,7 +13,7 @@ public class UnitsManager : Singleton<UnitsManager>
         public Material color;
     }
     
-    public List<Build> builds = new List<Build>();
+    public List<Locality> localities = new List<Locality>();
     public List<Unit> enemyUnits = new List<Unit>();
     public UnityEvent EventPlayerDead = new UnityEvent();
     public UnityEvent EvennEnemyDead = new UnityEvent();

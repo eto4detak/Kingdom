@@ -22,6 +22,7 @@ public class GameUnitInfo
 public class GameUnit : MonoBehaviour, ISelected
 {
     public Team team;
+    public Culture culture;
     public List<GameUnitInfo> availablePotential = new List<GameUnitInfo>();
     public UnityEvent changed = new UnityEvent();
 
@@ -47,13 +48,26 @@ public class GameUnit : MonoBehaviour, ISelected
             changed.Invoke();
         }
     }
+
+    protected virtual void Awake()
+    {
+        culture.changed.AddListener(ChangeCulture);
+    }
+
+    public void ChangeCulture()
+    {
+        List<Locality> cites = new List<Locality>(UnitsManager.instance.localities);
+        cites.Remove((Locality) this);
+        cites.RemoveAll(x => x.culture.cults[0].name != culture.cults[0].name);
+        Locality closest = transform.GetClosestT(cites);
+        team = closest.team;
+    }
+
     public void Select()
     {
-        if(team == Team.Player1)
-        {
-            SelectedPanel.instance.Setup(this);
-        }
+        SelectedPanel.instance.TrySelect(this, Team.Player1);
     }
+
     public void AddPotential(GameUnitInfo potencial)
     {
         availablePotential.Add(potencial);

@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 6508011355356164229}
   - component: {fileID: 6508011355356164228}
-  - component: {fileID: 6508011355356164231}
   - component: {fileID: 6508011355356164249}
   - component: {fileID: 5578277670451907090}
   - component: {fileID: 6433176509611059988}
@@ -47,19 +46,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 232b563fd1487da4fbcf4b0934e94936, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &6508011355356164231
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6508011355356164227}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d1eb26089dfceea4694c5fc1ddfff193, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  target: {fileID: 0}
 --- !u!114 &6508011355356164249
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -85,10 +71,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _Unions:
-  - Name: War1
+  - Name: 
     Team1: 0
+    Team2: 1
     Union: 1
-    Team2: 3
+  - Name: 
+    Team1: 0
+    Team2: 2
+    Union: 2
+  - Name: 
+    Team1: 1
+    Team2: 2
+    Union: 2
 --- !u!114 &6433176509611059988
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -102,3 +96,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timer: 0
+  playLevel:
+    m_PersistentCalls:
+      m_Calls: []

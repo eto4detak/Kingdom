@@ -40,6 +40,24 @@ public static class UnityExtension
         return closest;
     }
 
+    public static T GetClosestT<T>(this Component fromThis, List<T> stack) where T : Component
+    {
+        T closest = null;
+        float closestDistanceSqr = Mathf.Infinity;
+        Vector3 distance;
+        for (int i = 0; i < stack.Count; i++)
+        {
+            distance = stack[i].transform.position - fromThis.transform.position;
+            float dSqrToTarget = distance.sqrMagnitude;
+            if (dSqrToTarget < closestDistanceSqr)
+            {
+                closestDistanceSqr = dSqrToTarget;
+                closest = stack[i];
+            }
+        }
+        return closest;
+    }
+
     public static Component GetClosest<T>(Vector3 fromThis, List<T> stack) where T : Component
     {
         Component closest = null;

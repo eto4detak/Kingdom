@@ -2,15 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Village : Build
+public class Village : Locality
 {
-
-
-    protected void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         AddPotential(new GameUnitInfo { name = "Immigrants", start = CreateImmigrants });
     }
-
 
     public void CreateImmigrants()
     {
@@ -27,7 +25,9 @@ public class Village : Build
 
     protected override void Development()
     {
-        People++;
+        float dev = 1f;
+        People += (int)dev;
+        culture.Development(dev);
     }
 
 }

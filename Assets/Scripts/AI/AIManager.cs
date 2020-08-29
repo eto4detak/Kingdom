@@ -62,7 +62,7 @@ public class AIManager : Singleton<AIManager>
 
     public void Statistic()
     {
-        superiority = UnitsManager.instance.enemyUnits.Count - UnitsManager.instance.builds.Count;
+        superiority = UnitsManager.instance.enemyUnits.Count - UnitsManager.instance.localities.Count;
         meleePlayerCount = UnitsManager.instance.GetPlayerUnit(UnitType.melee).Count;
         archerPlayerCount = UnitsManager.instance.GetPlayerUnit(UnitType.archer).Count;
         cavaleryPlayerCount = UnitsManager.instance.GetPlayerUnit(UnitType.cavalery).Count;
@@ -72,7 +72,7 @@ public class AIManager : Singleton<AIManager>
 
         if (cavaleryEnemyCount > meleeEnemyCount)
         {
-            if (UnitsManager.instance.builds.Count != 0)
+            if (UnitsManager.instance.localities.Count != 0)
             {
                 //foreach (var enemy in UnitsManager.instance.enemyUnits)
                 //{

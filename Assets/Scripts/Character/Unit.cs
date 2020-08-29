@@ -154,7 +154,7 @@ public class Unit : MonoBehaviour, IMovable, IAttack, IUnit
         for (int i = 0; i < findStack.Length; i++)
         {
             tempUnit = findStack[i].GetComponent<Health>();
-            if(tempUnit && Unions.CheckAllies(tempUnit.GetTeam(), health.GetTeam())) found.Add(tempUnit);
+            if(tempUnit && Unions.instance.CheckAllies(tempUnit.GetTeam(), health.GetTeam())) found.Add(tempUnit);
         }
         return found;
     }

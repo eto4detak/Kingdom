@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Build : GameUnit, IBuild
+public class Locality : GameUnit
 {
     private bool isStart;
 
@@ -27,11 +27,14 @@ public class Build : GameUnit, IBuild
         }
     }
 
-    public virtual void JoinUnit(GameUnit add)
+    public virtual void JoinUnit(GameUnit traveler)
     {
+        if (Unions.instance.CheckEnemies(traveler.team, team)) return;
 
-        People += add.People;
-        Gold += add.Gold;
+        People += traveler.People;
+        Gold += traveler.Gold;
+        culture.Merger(traveler.culture);
+        Destroy(traveler.gameObject);
     }
 
     public T GetPrefab<T>() where T : MonoBehaviour

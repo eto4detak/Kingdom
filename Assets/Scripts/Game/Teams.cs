@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,19 +11,11 @@ public enum Team
     Hostile,
 }
 
-//public class Unions
-//{
-
-
-//    public static bool CheckEnemies(Team _team1, Team _team2)
-//    {
-//        if (_team1 != _team2) return true;
-//        return false;
-//    }
-//    public static bool CheckAllies(Team _team1, Team _team2)
-//    {
-//        if (_team1 == _team2) return true;
-//        return false;
-//    }
-//}
+[Serializable]
+public enum TeamState
+{
+    Allies,
+    Enemies,
+    Neitrals,
+}
 

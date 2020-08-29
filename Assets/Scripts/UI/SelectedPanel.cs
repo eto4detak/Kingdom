@@ -18,26 +18,28 @@ public class SelectedPanel : Singleton<SelectedPanel>
     private UnityAction selectedPotencial;
 
 
-    public void Setup(GameUnit newOrigin)
+    public void TrySelect(GameUnit obj, Team self)
     {
         ClearDisplay();
+        origin = obj;
 
-        origin = newOrigin;
+        if (Unions.instance.CheckAllies(self, origin.team))
+        {
+            CreateBtnPotentials();
+        }
         origin.changed.AddListener(UpdateDisplay);
-        CreateBtnPotentials();
         UpdateDisplay();
     }
+
     public bool IsSelected()
     {
         return origin != null;
     }
 
-
     public void ClickForOrigin(Vector3 clickPosition)
     {
         selectedPotencial();
     }
-
 
     public void CreateBtnPotentials()
     {
@@ -68,7 +70,6 @@ public class SelectedPanel : Singleton<SelectedPanel>
             ClearPotencial();
         }
     }
-
 
     protected void UpdateDisplay()
     {

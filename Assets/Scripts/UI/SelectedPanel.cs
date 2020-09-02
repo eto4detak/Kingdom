@@ -13,9 +13,11 @@ public class SelectedPanel : Singleton<SelectedPanel>
     public TextMeshProUGUI txtGold;
     public Button potencialItem;
     public CultItem cultItem;
+    public RespectItem respectItem;
     public GameUnit origin;
     public List<Button> allPotoncial = new List<Button>();
     public List<CultItem> allCults = new List<CultItem>();
+    public List<RespectItem> allRespects = new List<RespectItem>();
 
     private UnityAction selectedPotencial;
 
@@ -30,6 +32,7 @@ public class SelectedPanel : Singleton<SelectedPanel>
             txtGold.text = "";
             ClearCults();
             ClearPotencial();
+            ClearRespects();
         }
     }
 
@@ -59,6 +62,22 @@ public class SelectedPanel : Singleton<SelectedPanel>
         }
     }
 
+    protected void CreateRespects()
+    {
+        float distance = 45f;
+        for (int i = 0; i < origin.loyalty.respects.Count; i++)
+        {
+            var respect = origin.loyalty.respects[i];
+            var item = Instantiate(respectItem, respectItem.transform.parent);
+            item.sName.text = respect.team.ToString();
+            item.percent.text = ((int)respect.val).ToString();
+
+            item.transform.position += Vector3.down * i * distance;
+            allRespects.Add(item);
+            item.gameObject.SetActive(true);
+        }
+    }
+
     protected void CreatePotentials()
     {
         float distance = 45f;
@@ -75,8 +94,6 @@ public class SelectedPanel : Singleton<SelectedPanel>
         }
     }
 
-
-
     protected void UpdateDisplay()
     {
         txtName.text = origin.MyName;
@@ -89,6 +106,8 @@ public class SelectedPanel : Singleton<SelectedPanel>
             CreateCults();
             ClearPotencial();
             CreatePotentials();
+            ClearRespects();
+            CreateRespects();
         }
     }
 
@@ -109,5 +128,14 @@ public class SelectedPanel : Singleton<SelectedPanel>
             Destroy(allCults[i].gameObject);
         }
         allCults.Clear();
+    }
+
+    protected void ClearRespects()
+    {
+        for (int i = 0; i < allRespects.Count; i++)
+        {
+            Destroy(allRespects[i].gameObject);
+        }
+        allRespects.Clear();
     }
 }

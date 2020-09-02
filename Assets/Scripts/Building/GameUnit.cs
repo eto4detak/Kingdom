@@ -21,8 +21,12 @@ public class GameUnitInfo
 
 public class GameUnit : MonoBehaviour, ISelected
 {
+    //legitimacy
+    //popularity
+    //respect
     public Team team;
     public Culture culture;
+    public Loyalty loyalty = new Loyalty();
     public List<GameUnitInfo> availablePotential = new List<GameUnitInfo>();
     public UnityEvent changed = new UnityEvent();
 
@@ -51,25 +55,6 @@ public class GameUnit : MonoBehaviour, ISelected
 
     protected virtual void Awake()
     {
-        culture.changed.AddListener(ChangeCulture);
-    }
-
-    public void ChangeCulture()
-    {
-        List<Locality> cites = new List<Locality>(UnitsManager.instance.localities);
-        cites.Remove((Locality) this);
-        cites.RemoveAll(x => x.culture.cults[0].name != culture.cults[0].name);
-        Locality closest = transform.GetClosestT(cites);
-        if (closest)
-        {
-            team = closest.team;
-        }
-        else
-        {
-
-            Debug.Log("error closest " + cites.Count);
-
-        }
     }
 
     public void Select()
@@ -81,5 +66,7 @@ public class GameUnit : MonoBehaviour, ISelected
     {
         availablePotential.Add(potencial);
     }
+
+
 
 }

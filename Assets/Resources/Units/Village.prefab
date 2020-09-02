@@ -111,9 +111,9 @@ MonoBehaviour:
   changed:
     m_PersistentCalls:
       m_Calls: []
-  myName: Minsk
-  people: 40
-  gold: 10
+  myName: 
+  people: 0
+  gold: 0
 --- !u!54 &7559991547385825972
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -142,6 +142,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27d5572981e27f74eba076e9d7cf3e54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cults:
-  - name: 0
-    val: 20
+  cults: []
+  changedCulture:
+    m_PersistentCalls:
+      m_Calls: []

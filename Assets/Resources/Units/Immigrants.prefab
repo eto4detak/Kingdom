@@ -116,7 +116,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   myName: Immigrants
-  people: 20
+  people: 0
   gold: 0
   state: 0
   movement: {fileID: 1503272420336919462}
@@ -164,6 +164,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27d5572981e27f74eba076e9d7cf3e54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cults:
-  - name: 0
-    val: 20
+  cults: []
+  changedCulture:
+    m_PersistentCalls:
+      m_Calls: []

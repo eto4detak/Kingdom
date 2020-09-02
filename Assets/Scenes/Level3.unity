@@ -299,8 +299,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6819808682979631942, guid: d29308de1ca90e54cb538b5824f3260d,
         type: 3}
+      propertyPath: cults.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6819808682979631942, guid: d29308de1ca90e54cb538b5824f3260d,
+        type: 3}
       propertyPath: cults.Array.data[0].name
-      value: 2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6819808682979631942, guid: d29308de1ca90e54cb538b5824f3260d,
         type: 3}
@@ -403,8 +408,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6819808682979631942, guid: d29308de1ca90e54cb538b5824f3260d,
         type: 3}
-      propertyPath: cults.Array.data[0].name
+      propertyPath: cults.Array.size
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6819808682979631942, guid: d29308de1ca90e54cb538b5824f3260d,
+        type: 3}
+      propertyPath: cults.Array.data[0].name
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6819808682979631942, guid: d29308de1ca90e54cb538b5824f3260d,
         type: 3}
@@ -550,8 +560,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6819808682979631942, guid: d29308de1ca90e54cb538b5824f3260d,
         type: 3}
-      propertyPath: cults.Array.data[0].name
+      propertyPath: cults.Array.size
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6819808682979631942, guid: d29308de1ca90e54cb538b5824f3260d,
+        type: 3}
+      propertyPath: cults.Array.data[0].name
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6819808682979631942, guid: d29308de1ca90e54cb538b5824f3260d,
         type: 3}
@@ -1232,6 +1247,11 @@ PrefabInstance:
     - target: {fileID: 7559991547385825972, guid: d29308de1ca90e54cb538b5824f3260d,
         type: 3}
       propertyPath: m_IsKinematic
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6819808682979631942, guid: d29308de1ca90e54cb538b5824f3260d,
+        type: 3}
+      propertyPath: cults.Array.size
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6819808682979631942, guid: d29308de1ca90e54cb538b5824f3260d,
@@ -1966,8 +1986,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6819808682979631942, guid: d29308de1ca90e54cb538b5824f3260d,
         type: 3}
+      propertyPath: cults.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6819808682979631942, guid: d29308de1ca90e54cb538b5824f3260d,
+        type: 3}
       propertyPath: cults.Array.data[0].name
-      value: 2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6819808682979631942, guid: d29308de1ca90e54cb538b5824f3260d,
         type: 3}
@@ -2070,6 +2095,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6819808682979631942, guid: d29308de1ca90e54cb538b5824f3260d,
         type: 3}
+      propertyPath: cults.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6819808682979631942, guid: d29308de1ca90e54cb538b5824f3260d,
+        type: 3}
       propertyPath: cults.Array.data[0].name
       value: 1
       objectReference: {fileID: 0}
@@ -2152,6 +2182,31 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6676923679005731893, guid: d29308de1ca90e54cb538b5824f3260d,
+        type: 3}
+      propertyPath: myName
+      value: Minsk
+      objectReference: {fileID: 0}
+    - target: {fileID: 6676923679005731893, guid: d29308de1ca90e54cb538b5824f3260d,
+        type: 3}
+      propertyPath: people
+      value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: 6676923679005731893, guid: d29308de1ca90e54cb538b5824f3260d,
+        type: 3}
+      propertyPath: gold
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 6819808682979631942, guid: d29308de1ca90e54cb538b5824f3260d,
+        type: 3}
+      propertyPath: cults.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6819808682979631942, guid: d29308de1ca90e54cb538b5824f3260d,
+        type: 3}
+      propertyPath: cults.Array.data[0].val
+      value: 15
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d29308de1ca90e54cb538b5824f3260d, type: 3}

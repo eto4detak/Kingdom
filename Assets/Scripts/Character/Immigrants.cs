@@ -12,7 +12,7 @@ public class Immigrants : GameUnit
     protected override void Awake()
     {
         base.Awake();
-        AddPotential(new GameUnitInfo { name = "Move to", start = MoveTo });
+        AddPotential(new GameUnitInfo { name = "Move to", start = MoveToOrHome });
     }
 
     protected void Start()
@@ -73,10 +73,10 @@ public class Immigrants : GameUnit
     public void SetTarget(Vector3? target)
     {
         moveTarget = target;
-        MoveTo();
+        MoveToOrHome();
     }
 
-    public void MoveTo()
+    public void MoveToOrHome()
     {
         if (moveTarget == null)
         {

@@ -30,10 +30,10 @@ public class Cult : IComparable<Cult>
 public class Culture : MonoBehaviour
 {
     public List<Cult> cults = new List<Cult>();
-    public UnityEvent changed = new UnityEvent();
+    public UnityEvent changedCulture = new UnityEvent();
 
 
-    public void ChangeCulture(float val)
+    public void Development(float val)
     {
         float totalCult = 0;
         for (int i = 0; i < cults.Count; i++)
@@ -47,32 +47,7 @@ public class Culture : MonoBehaviour
         }
     }
 
-    public void Merger(Culture newCulture)
-    {
-        CultName first = cults[0].name;
-        for (int i = 0; i < newCulture.cults.Count; i++)
-        {
-            ChangeCult(newCulture.cults[i]);
-            newCulture.cults[i].val = 0;
-        }
-        CultName now = newCulture.cults[0].name;
-
-        if (now != first)
-        {
-            changed?.Invoke();
-        }
-    }
-
-    public Cult GetCult(CultName find)
-    {
-        for (int i = 0; i < cults.Count; i++)
-        {
-            if (find == cults[i].name) return cults[i];
-        }
-        return null;
-    }
-
-    private void ChangeCult(Cult added)
+    public void ChangeCult(Cult added)
     {
         Cult cult = GetCult(added.name);
         if (cult == null)
@@ -84,6 +59,33 @@ public class Culture : MonoBehaviour
             cult.val += added.val;
         }
         cults.Sort();
+    }
+
+    public bool Merger(Culture newCulture)
+    {
+        CultName first = cults[0].name;
+        for (int i = 0; i < newCulture.cults.Count; i++)
+        {
+            ChangeCult(newCulture.cults[i]);
+            newCulture.cults[i].val = 0;
+        }
+        CultName now = cults[0].name;
+
+        if (now != first)
+        {
+            changedCulture?.Invoke();
+            return true;
+        }
+        return false;
+    }
+
+    public Cult GetCult(CultName find)
+    {
+        for (int i = 0; i < cults.Count; i++)
+        {
+            if (find == cults[i].name) return cults[i];
+        }
+        return null;
     }
 
 }

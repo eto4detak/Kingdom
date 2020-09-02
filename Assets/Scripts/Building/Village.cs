@@ -7,28 +7,28 @@ public class Village : Locality
     protected override void Awake()
     {
         base.Awake();
+
+        loyalty.ChangeLoyalty(new Respect() { team = team, val = 100 });
         AddPotential(new GameUnitInfo { name = "Immigrants", start = CreateImmigrants });
     }
 
     public void CreateImmigrants()
     {
-        int minPeople = 20;
-        int immigra = 20;
-        if (People < minPeople + immigra) return;
-
-        People -= immigra;
-        culture.ChangeCulture(-immigra);
-        var prefab = GetPrefab<Immigrants>();
-        Immigrants immigrants = Instantiate(prefab, transform.position, Quaternion.identity);
-        immigrants.Setup(this);
-        immigrants.Select();
+        int people = 20;
+        var immigrants = CreateFormation<Immigrants>(people);
+        if (immigrants)
+        {
+            immigrants.Setup(this);
+            immigrants.Select();
+        }
     }
 
     protected override void Development()
     {
         float dev = 1f;
         People += (int)dev;
-        culture.ChangeCulture(dev);
+        culture.Development(dev);
+        loyalty.Development(dev);
     }
 
 }

@@ -33,11 +33,27 @@ public class Locality : GameUnit
 
         People += traveler.People;
         Gold += traveler.Gold;
-        culture.Merger(traveler.culture);
+        bool changeCult = culture.Merger(traveler.culture);
+        team = loyalty.Merger(traveler.loyalty);
+
         Destroy(traveler.gameObject);
     }
 
-    public T GetPrefab<T>() where T : MonoBehaviour
+    protected T CreateFormation<T>(int countPeople) where T : GameUnit
+    {
+        int minPeople = 20;
+        if (People < minPeople + countPeople) return null;
+
+        People -= countPeople;
+        culture.Development(-countPeople);
+        var prefab = GetPrefab<T>();
+        T formation = Instantiate(prefab, transform.position, Quaternion.identity);
+        formation.People = countPeople;
+        formation.loyalty.ChangeLoyalty(new Respect() {team = team, val = countPeople });
+        return formation;
+    }
+
+    protected T GetPrefab<T>() where T : MonoBehaviour
     {
         return Resources.Load<T>("Units/" + typeof(T));
     }

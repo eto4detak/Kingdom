@@ -79,11 +79,12 @@ public class LevelManager : Singleton<LevelManager>
             case LevelState.LoadLevel:
 
                 Debug.Log("StartLevel");
-
+                GMode.instance.PauseGame();
                 SetFirstSettingsLevel();
                 break;
             case LevelState.Play:
                 Debug.Log("Play");
+                GMode.instance.ContinueGame();
                 PlayLevel();
                 break;
             case LevelState.AllEnemiesSpawned:
@@ -108,9 +109,9 @@ public class LevelManager : Singleton<LevelManager>
     private void SetFirstSettingsLevel()
     {
         ChangeLevelState(LevelState.LoadLevel);
-        GMode.instance.ContinueGame();
+        //GMode.instance.ContinueGame();
         GameHUD.instance.ViewLvlLabel(true);
-        UnitsManager.instance.ChangeUnitsActivity(false);
+
         MainMenuManager.instance.HideMainMenu();
     }
 
@@ -124,7 +125,6 @@ public class LevelManager : Singleton<LevelManager>
         GameHUD.instance.ViewLvlLabel(false);
         UnitsManager.instance.EventPlayerDead.AddListener(GameOver);
         UnitsManager.instance.EvennEnemyDead.AddListener(GameComplate);
-        UnitsManager.instance.ChangeUnitsActivity(true);
 
     }
 
@@ -133,7 +133,6 @@ public class LevelManager : Singleton<LevelManager>
         Debug.Log("game complete");
 
         ChangeLevelState(LevelState.Win);
-        UnitsManager.instance.ChangeUnitsActivity(false);
         StopSpawnUnits();
         GameCompleteUI.instance.ShowPanel();
 
@@ -143,7 +142,6 @@ public class LevelManager : Singleton<LevelManager>
         Debug.Log("game over");
 
         ChangeLevelState(LevelState.Lose);
-        UnitsManager.instance.ChangeUnitsActivity(false);
         StopSpawnUnits();
         GameOverUI.instance.ShowPanel();
     }

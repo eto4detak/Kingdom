@@ -5,19 +5,31 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
+using System;
+
+[Serializable]
+public struct ViewAlliace
+{
+    public TeamState state;
+    public Sprite img;
+}
 
 public class SelectedPanel : Singleton<SelectedPanel>
 {
     public Text txtName;
     public TextMeshProUGUI txtPeople;
     public TextMeshProUGUI txtGold;
+    public TextMeshProUGUI txtFood;
+    public TextMeshProUGUI txtForce;
     public Button potencialItem;
+    public Image iconAlliace;
     public CultItem cultItem;
     public RespectItem respectItem;
     public GameUnit origin;
     public List<Button> allPotoncial = new List<Button>();
     public List<CultItem> allCults = new List<CultItem>();
     public List<RespectItem> allRespects = new List<RespectItem>();
+    public List<ViewAlliace> viewsAlliace = new List<ViewAlliace>();
 
     private UnityAction selectedPotencial;
 
@@ -25,56 +37,58 @@ public class SelectedPanel : Singleton<SelectedPanel>
     {
         if (origin != null)
         {
-            origin.changed.RemoveListener(UpdateDisplay);
+            origin.unitChanged.RemoveListener(UpdateDisplay);
             origin = null;
             txtName.text = "";
             txtPeople.text = "";
             txtGold.text = "";
+            txtFood.text = "";
+            txtForce.text = "";
+            iconAlliace.sprite = null;
             ClearCults();
             ClearPotencial();
             ClearRespects();
         }
     }
 
-    public void TrySelect(GameUnit obj, Team self)
+    public void ViewUnit(GameUnit unit, Team self)
     {
         ClearDisplay();
-        origin = obj;
+        origin = unit;
 
-        origin.changed.AddListener(UpdateDisplay);
+        origin.unitChanged.AddListener(UpdateDisplay);
         UpdateDisplay();
     }
-
-    protected void CreateCults()
+    protected void UpdateAllinace()
     {
-        float distance = 45f;
-        
-        for (int i = 0; i < origin.culture.cults.Count; i++)
+        TeamState state = Unions.instance.GetState(origin.team, GManager.instance.selfTeam);
+        for (int i = 0; i < viewsAlliace.Count; i++)
         {
-            var item = Instantiate(cultItem, cultItem.transform.parent);
-            item.sName.text = origin.culture.cults[i].name.ToString();
-            item.percent.text =  ((int)origin.culture.cults[i].val).ToString();
-            //cult.img
-
-            item.transform.position += Vector3.down * i * distance;
-            allCults.Add(item);
-            item.gameObject.SetActive(true);
+            if (state == viewsAlliace[i].state)
+            {
+                iconAlliace.sprite = viewsAlliace[i].img;
+                break;
+            }
         }
     }
 
-    protected void CreateRespects()
+    protected void UpdateDisplay()
     {
-        float distance = 45f;
-        for (int i = 0; i < origin.loyalty.respects.Count; i++)
-        {
-            var respect = origin.loyalty.respects[i];
-            var item = Instantiate(respectItem, respectItem.transform.parent);
-            item.sName.text = respect.team.ToString();
-            item.percent.text = ((int)respect.val).ToString();
+        txtName.text = origin.SName;
+        txtPeople.text = origin.people.humans.Count.ToString();
+        txtGold.text = origin.Gold.ToString();
+        txtFood.text = origin.food.Quantity.ToString();
+        txtForce.text = origin.power.GetPower().ToString();
 
-            item.transform.position += Vector3.down * i * distance;
-            allRespects.Add(item);
-            item.gameObject.SetActive(true);
+        UpdateAllinace();
+        ClearCults();
+        ClearPotencial();
+        ClearRespects();
+        CreateCults();
+        CreateRespects();
+        if (Team.Player1 == origin.team)
+        {
+            CreatePotentials();
         }
     }
 
@@ -94,20 +108,35 @@ public class SelectedPanel : Singleton<SelectedPanel>
         }
     }
 
-    protected void UpdateDisplay()
+    protected void CreateCults()
     {
-        txtName.text = origin.MyName;
-        txtPeople.text = origin.People.ToString();
-        txtGold.text = origin.Gold.ToString();
+        float distance = 45f;
 
-        if (Unions.instance.CheckAllies(Team.Player1, origin.team))
+        for (int i = 0; i < origin.people.culture.cults.Count; i++)
         {
-            ClearCults();
-            CreateCults();
-            ClearPotencial();
-            CreatePotentials();
-            ClearRespects();
-            CreateRespects();
+            var item = Instantiate(cultItem, cultItem.transform.parent);
+            item.sName.text = origin.people.culture.cults[i].name.ToString();
+            item.percent.text = ((int)origin.people.culture.cults[i].val).ToString();
+
+            item.transform.position += Vector3.down * i * distance;
+            allCults.Add(item);
+            item.gameObject.SetActive(true);
+        }
+    }
+
+    protected void CreateRespects()
+    {
+        float distance = 45f;
+        List<TeamValue> teams = origin.people.GetTeamStatistic();
+        for (int i = 0; i < teams.Count; i++)
+        {
+            var item = Instantiate(respectItem, respectItem.transform.parent);
+            item.sName.text = teams[i].team.ToString();
+            item.percent.text = (teams[i].count).ToString();
+
+            item.transform.position += Vector3.down * i * distance;
+            allRespects.Add(item);
+            item.gameObject.SetActive(true);
         }
     }
 

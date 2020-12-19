@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GMode : Singleton<GMode>
 {
-    private bool isPause;
+    private ModeState state;
     private bool isMute;
 
     protected override void Awake()
@@ -15,20 +15,25 @@ public class GMode : Singleton<GMode>
 
     public void PauseGame()
     {
-        isPause = true;
+        state = ModeState.Pause;
         Time.timeScale = 0;
-        MusicPlayer.instance.StopFirstSound();
+
+        Debug.Log("PauseGame ");
+
+        //MusicPlayer.instance.StopFirstSound();
     }
 
     public void ContinueGame()
     {
-        isPause = false;
+        Debug.Log("ContinueGame ");
+
+        state = ModeState.Play;
         Time.timeScale = 1;
-        if (!SaveLoad.GetInstance().pData.musicMute)
-        {
-            MusicPlayer.instance.StopFirstSound();
-            MusicPlayer.instance.PlayFirstSound();
-        }
+        //if (!SaveLoad.GetInstance().pData.musicMute)
+        //{
+        //    MusicPlayer.instance.StopFirstSound();
+        //    MusicPlayer.instance.PlayFirstSound();
+        //}
     }
 
     public void Mute(bool mute)
@@ -38,4 +43,11 @@ public class GMode : Singleton<GMode>
         SaveLoad.GetInstance().pData.musicMute = isMute;
         SaveLoad.GetInstance().Save();
     }
+}
+
+public enum ModeState
+{
+    Play,
+    Pause,
+
 }

@@ -34,10 +34,10 @@ public class BonusAdder : Singleton<BonusAdder>
         float radius = 1f;
         for (int i = 0; i < mousePath.Count; i++)
         {
-            Unit found = UnitsManager.instance.GetClosestFreePlayerUnit(mousePath[i], radius);
-            if (!found) continue;
-            if (party.Exists(x => x == found)) continue;
-            party.Add(found);
+            //Unit found = UnitsManager.instance.GetClosestFreePlayerUnit(mousePath[i], radius);
+            //if (!found) continue;
+            //if (party.Exists(x => x == found)) continue;
+            //party.Add(found);
         }
 
         if (party.Count > minCountUnit)

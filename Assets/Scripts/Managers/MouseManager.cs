@@ -12,7 +12,6 @@ public enum FindTarget
     Point
 }
 
-
 public class MouseManager : Singleton<MouseManager>
 {
     public List<Vector3> mousePath = new List<Vector3>();
@@ -230,16 +229,16 @@ public class MouseManager : Singleton<MouseManager>
 
     private void OnClickRightObject(Unit target, Vector3 hitPoint)
     {
-        Unit selected = UnitsManager.instance.GetClosestFreePlayerUnit(hitPoint);
-        if (selected != null && target.GetTeam() != selected.GetTeam())
-            selected.Command = new AttackCommand(selected, target);
+        //Unit selected = UnitsManager.instance.GetClosestFreePlayerUnit(hitPoint);
+        //if (selected != null && target.GetTeam() != selected.GetTeam())
+        //    selected.Command = new AttackCommand(selected, target);
     }
 
     private void OnClickRight(Vector3 hitPoint)
     {
-        Unit selected = UnitsManager.instance.GetClosestFreePlayerUnit(hitPoint);
-        if(selected != null)
-        selected.Command = new RushCommand(selected, hitPoint);
+        //Unit selected = UnitsManager.instance.GetClosestFreePlayerUnit(hitPoint);
+        //if(selected != null)
+        //selected.Command = new RushCommand(selected, hitPoint);
     }
 }
 

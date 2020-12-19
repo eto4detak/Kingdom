@@ -6,7 +6,7 @@ using UnityEngine.Events;
 
 public class UnitsManager : Singleton<UnitsManager>
 {
-    [Serializable]
+    [System.Serializable]
     public struct TeamColor
     {
         public Team team;
@@ -14,6 +14,7 @@ public class UnitsManager : Singleton<UnitsManager>
     }
     
     public List<Locality> localities = new List<Locality>();
+    public List<GameUnit> units = new List<GameUnit>();
     public UnityEvent EventPlayerDead = new UnityEvent();
     public UnityEvent EvennEnemyDead = new UnityEvent();
     
@@ -21,95 +22,50 @@ public class UnitsManager : Singleton<UnitsManager>
     public Material enemyMaterial;
     public Material flickerMaterial;
 
-    private void Start()
+
+    protected void Start()
     {
-        Unit[] units = transform.GetComponentsInChildren<Unit>();
-        for (int i = 0; i < units.Length; i++)
+        GameTime.instance.timeChanged.AddListener(TryChangeTeam);
+    }
+
+
+
+    public List<Locality> GetClosestLocalities(GameObject from)
+    {
+        List<Locality> locs = new List<Locality>(localities);
+        Locality temp;
+        for (int j = 0; j < locs.Count; j++)
         {
-            AttachedUnit(units[i]);
+            float dist1 = Vector3.Distance(from.transform.position, locs[j].transform.position);
+            for (int i = 0; i < locs.Count; i++)
+            {
+                if (locs[j] == locs[i]) continue;
+
+                float dist2 = Vector3.Distance(from.transform.position, locs[i].transform.position);
+                if(dist1 < dist2)
+                {
+                    temp = locs[j];
+                    locs[j] = locs[i];
+                    locs[i] = temp;
+                }
+            }
         }
+
+        return locs;
     }
 
-    public void ChangeUnitsActivity(bool activity)
+    public Team GetNewTeam()
     {
-        //for (int i = 0; i < builds.Count; i++)
-        //{
-        //    AttachedUnit(builds[i]);
-        //    builds[i].ChangeUnitActivity(activity);
-        //}
-
-        //for (int i = 0; i < enemyUnits.Count; i++)
-        //{
-        //    AttachedUnit(enemyUnits[i]);
-        //    enemyUnits[i].ChangeUnitActivity(activity);
-        //}
+        Team found = Team.Neitral;
+        for (int i = 0; i < localities.Count; i++)
+        {
+            if((localities[i].team) > found)
+            {
+                found = localities[i].team;
+            }
+        }
+        return found +1;
     }
-
-    public List<Unit> GetClosestUnits(Vector3 target)
-    {
-        List<Unit> party = new List<Unit>();
-        //float mindistance = 10f;
-        //Vector3 distance;
-        //for (int i = 0; i < builds.Count; i++)
-        //{
-        //    if (builds[i] == null) continue;
-        //    if (builds[i].Armament.isAttack) continue;
-        //    distance = target - builds[i].transform.position;
-        //    distance.y = 0;
-        //    if (distance.magnitude < mindistance)
-        //    {
-        //        party.Add( builds[i]);
-        //    }
-        //}
-        return party;
-    }
-
-    public Unit GetClosestFreePlayerUnit(Vector3 target)
-    {
-        Unit closest = null;
-        //float distance = Mathf.Infinity;
-        //float mindistance = Mathf.Infinity;
-        //for (int i = 0; i < builds.Count; i++)
-        //{
-        //    if (builds[i] == null) continue;
-        //    if (builds[i].Armament.isAttack) continue;
-        //    distance = (target - builds[i].transform.position).magnitude;
-        //    if (distance < mindistance)
-        //    {
-        //        mindistance = distance;
-        //        closest = builds[i];
-        //    }
-        //}
-        return closest;
-    }
-
-    public Unit GetClosestFreePlayerUnit(Vector3 target, float maxDistance)
-    {
-        Unit closest = null;
-        //float distance = Mathf.Infinity;
-        //float mindistance = Mathf.Infinity;
-        //for (int i = 0; i < builds.Count; i++)
-        //{
-        //    distance = (target - builds[i].transform.position).magnitude;
-        //    if (distance < mindistance && distance < maxDistance)
-        //    {
-        //        mindistance = distance;
-        //        closest = builds[i];
-        //    }
-        //}
-        return closest;
-    }
-
-    public List<Unit> GetPlayerFreeUnits()
-    {
-        List<Unit> freeUnits = new List<Unit>();
-        //for (int i = 0; i < builds.Count; i++)
-        //{
-        //    if (builds[i].isFree) freeUnits.Add(builds[i]);
-        //}
-        return freeUnits;
-    }
-
 
     public Material GetTeamColor(Team team)
     {
@@ -117,20 +73,24 @@ public class UnitsManager : Singleton<UnitsManager>
         return enemyMaterial;
     }
 
+    protected void TryChangeTeam()
+    {
+        int minUnit = 50;
+        Team noTeam = Team.Neitral;
+        if (GameTime.instance.timeDay == TimeDay.Day)
+        {
+            for (int i = 0; i < localities.Count; i++)
+            {
+               if(localities[i].team == noTeam &&
+                    localities[i].people.humans.Count > minUnit)
+                {
+                    localities[i].ChangeTeam(GetNewTeam());
+                }
+            }
+        }
+    }
 
-    //public List<Build> GetCommandStack(Team team)
-    //{
-    //    if (team == Team.Player1) return builds;
-    //    else return enemyUnits;
-    //}
-
-    //public List<Build> GetEnemyStack(Team team)
-    //{
-    //    if (team == Team.Player1) return enemyUnits;
-    //    else return builds;
-    //}
-
-    public void AttachedUnit(Unit unit)
+    public void Registration(GameUnit add)
     {
         //List<Unit> stack = GetCommandStack(unit.GetTeam());
         //if (!stack.Exists(x => x.Equals(unit)))
@@ -140,41 +100,6 @@ public class UnitsManager : Singleton<UnitsManager>
         //}
         //unit.die.RemoveListener(RemoveUnit);
         //unit.die.AddListener(RemoveUnit);
-    }
-
-    private void RemoveUnit(Unit removed)
-    {
-
-        //if(removed.GetTeam() == Team.Player1)
-        //{
-        //    builds.Remove(removed);
-        //    if (builds.Count == 0) EventPlayerDead?.Invoke();
-        //}
-        //else
-        //{
-        //    enemyUnits.Remove(removed);
-        //    if (enemyUnits.Count == 0) EvennEnemyDead?.Invoke();
-        //}
-    }
-
-
-    public List<Unit> GetPlayerUnit(UnitType find)
-    {
-        List<Unit> units = new List<Unit>();
-        //for (int i = 0; i < builds.Count; i++)
-        //{
-        //    if (builds[i].Armament.AttackType.GetUnitType() == find) units.Add(builds[i]);
-        //}
-        return units;
-    }
-    public List<Unit> GetEnemyUnit(UnitType find)
-    {
-        List<Unit> units = new List<Unit>();
-        //for (int i = 0; i < enemyUnits.Count; i++)
-        //{
-        //    if (enemyUnits[i].Armament.AttackType.GetUnitType() == find) units.Add(enemyUnits[i]);
-        //}
-        return units;
     }
 
     public Health GetClosestEnemy(Health origin)
@@ -194,18 +119,6 @@ public class UnitsManager : Singleton<UnitsManager>
         //    }
         //}
         return closest.health;
-    }
-
-    public void StopUnits()
-    {
-        //for (int i = 0; i < enemyUnits.Count; i++)
-        //{
-        //    enemyUnits[i].Command = new StopCommand(UnitsManager.instance.enemyUnits[i]);
-        //}
-        //for (int i = 0; i < builds.Count; i++)
-        //{
-        //    builds[i].Command = new StopCommand(UnitsManager.instance.builds[i]);
-        //}
     }
 
 

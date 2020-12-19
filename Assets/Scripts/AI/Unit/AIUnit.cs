@@ -24,7 +24,6 @@ public class AIUnit : MonoBehaviour
 
     private void Start()
     {
-        if (owner == null || owner.GetTeam() != Team.Hostile) enabled = false;
             
     }
 

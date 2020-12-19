@@ -4,7 +4,6 @@ using UnityEngine.Events;
 
 public class Immigrants : GameUnit
 {
-    public UnitState state;
     public CharacterContrMovement movement;
     public GameUnit home;
 
@@ -15,11 +14,21 @@ public class Immigrants : GameUnit
         AddPotential(new GameUnitInfo { name = "Move to", start = MoveToOrHome });
     }
 
-    protected void Start()
+    protected override void Start()
     {
+        base.Start();
         StartCoroutine(FindHome());
     }
 
+    protected void OnTriggerEnter(Collider other)
+    {
+        Locality newHome = other.GetComponent<Locality>();
+        if (home == newHome && state != UnitState.Back) return;
+        if (newHome != null && newHome.CanJoin(this))
+        {
+            newHome.JoinUnit(this);
+        }
+    }
     public IEnumerator FindHome()
     {
         float minDist = 0.1f;
@@ -47,28 +56,6 @@ public class Immigrants : GameUnit
         home = oldhome;
     }
 
-    protected void BackToHome()
-    {
-        state = UnitState.Back;
-        movement.MoveTo(home.transform);
-    }
-
-    protected void OnTriggerEnter(Collider other)
-    {
-        TryJoin(other);
-    }
-
-    public void TryJoin(Collider other)
-    {
-        if (home.gameObject == other.gameObject &&
-            state != UnitState.Back) return;
-
-        Locality newHome = other.GetComponent<Locality>();
-        if (newHome != null)
-        {
-            newHome.JoinUnit(this);
-        }
-    }
 
     public void SetTarget(Vector3? target)
     {
@@ -88,9 +75,15 @@ public class Immigrants : GameUnit
         }
     }
 
-    private void TryFindTarget()
+    protected void TryFindTarget()
     {
         MouseManager.instance.ChangeFind(FindTarget.Point, SetTarget);
+    }
+
+    protected void BackToHome()
+    {
+        state = UnitState.Back;
+        movement.MoveTo(home.transform);
     }
 
 }

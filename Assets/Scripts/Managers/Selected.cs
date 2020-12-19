@@ -85,22 +85,22 @@ public class Selected : Singleton<Selected>
     }
     public void CreateAttackCommand()
     {
-        if (selected.Count == 0) return;
-        Vector3 startPoint = selected[0].transform.position;
-        List<Unit> party = UnitsManager.instance.GetClosestUnits(startPoint);
-        ImprovePath();
-        Vector3 offset;
-        for (int i = 0; i < party.Count; i++)
-        {
-            offset = party[i].transform.position - startPoint;
-            List<Vector3> gPath = new List<Vector3>(MouseManager.instance.mousePath);
-            for (int g = 0; g < gPath.Count; g++)
-            {
-                gPath[g] += offset;
-            }
-            party[i].SetPathCommand(gPath);
-        }
-        selected.Clear();
+        //if (selected.Count == 0) return;
+        //Vector3 startPoint = selected[0].transform.position;
+        //List<Unit> party = UnitsManager.instance.GetClosestUnits(startPoint);
+        //ImprovePath();
+        //Vector3 offset;
+        //for (int i = 0; i < party.Count; i++)
+        //{
+        //    offset = party[i].transform.position - startPoint;
+        //    List<Vector3> gPath = new List<Vector3>(MouseManager.instance.mousePath);
+        //    for (int g = 0; g < gPath.Count; g++)
+        //    {
+        //        gPath[g] += offset;
+        //    }
+        //    party[i].SetPathCommand(gPath);
+        //}
+        //selected.Clear();
     }
 
     public void TrySelect()

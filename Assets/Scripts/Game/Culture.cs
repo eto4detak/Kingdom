@@ -6,86 +6,67 @@ using UnityEngine.Events;
 
 public enum CultName
 {
+    Neitral,
     Ra,
     Shan,
     Elin
 }
 
 [Serializable]
-public class Cult : IComparable<Cult>
+public struct Cult : IComparable<Cult>
 {
     public CultName name;
     public float val;
 
     public int CompareTo(Cult comparePart)
     {
-        if (comparePart == null)
-            return 1;
-
-        else
-            return -this.val.CompareTo(comparePart.val);
+        return -this.val.CompareTo(comparePart.val);
     }
+
+    public void Change(float added)
+    {
+        val = val + added;
+    }
+
 }
 
-public class Culture : MonoBehaviour
+[Serializable]
+public class Culture
 {
     public List<Cult> cults = new List<Cult>();
+    [HideInInspector]
     public UnityEvent changedCulture = new UnityEvent();
+    private List<Human> origin;
 
-
-    public void Development(float val)
+    public void SetOrigin(List<Human> _origin)
     {
-        float totalCult = 0;
-        for (int i = 0; i < cults.Count; i++)
+        origin = _origin;
+    }
+
+
+    public void Refresh()
+    {
+        cults.Clear();
+        for (int i = 0; i < origin.Count; i++)
         {
-            totalCult += cults[i].val;
-        }
-        if (totalCult == 0) return;
-        for (int i = 0; i < cults.Count; i++)
-        {
-            cults[i].val += val * (cults[i].val / totalCult);
+            AddCult(origin[i].cult);
         }
     }
 
-    public void ChangeCult(Cult added)
+    protected void AddCult(Cult added)
     {
-        Cult cult = GetCult(added.name);
-        if (cult == null)
+        int cult = cults.FindIndex(x => x.name == added.name);
+        if (cult == -1)
         {
-            cults.Add(new Cult() { name = added.name, val = added.val });
+            cults.Add(added);
         }
         else
         {
-            cult.val += added.val;
+            var newCults = cults[cult];
+            newCults.Change(added.val);
+            cults[cult] = newCults;
         }
         cults.Sort();
-    }
-
-    public bool Merger(Culture newCulture)
-    {
-        CultName first = cults[0].name;
-        for (int i = 0; i < newCulture.cults.Count; i++)
-        {
-            ChangeCult(newCulture.cults[i]);
-            newCulture.cults[i].val = 0;
-        }
-        CultName now = cults[0].name;
-
-        if (now != first)
-        {
-            changedCulture?.Invoke();
-            return true;
-        }
-        return false;
-    }
-
-    public Cult GetCult(CultName find)
-    {
-        for (int i = 0; i < cults.Count; i++)
-        {
-            if (find == cults[i].name) return cults[i];
-        }
-        return null;
     }
 
 }

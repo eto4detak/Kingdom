@@ -62,12 +62,12 @@ public class AIManager : Singleton<AIManager>
 
     public void Statistic()
     {
-        meleePlayerCount = UnitsManager.instance.GetPlayerUnit(UnitType.melee).Count;
-        archerPlayerCount = UnitsManager.instance.GetPlayerUnit(UnitType.archer).Count;
-        cavaleryPlayerCount = UnitsManager.instance.GetPlayerUnit(UnitType.cavalery).Count;
-        meleeEnemyCount = UnitsManager.instance.GetEnemyUnit(UnitType.melee).Count;
-        archerEnemyCount = UnitsManager.instance.GetEnemyUnit(UnitType.archer).Count;
-        cavaleryEnemyCount = UnitsManager.instance.GetEnemyUnit(UnitType.cavalery).Count;
+        //meleePlayerCount = UnitsManager.instance.GetPlayerUnit(UnitType.melee).Count;
+        //archerPlayerCount = UnitsManager.instance.GetPlayerUnit(UnitType.archer).Count;
+        //cavaleryPlayerCount = UnitsManager.instance.GetPlayerUnit(UnitType.cavalery).Count;
+        //meleeEnemyCount = UnitsManager.instance.GetEnemyUnit(UnitType.melee).Count;
+        //archerEnemyCount = UnitsManager.instance.GetEnemyUnit(UnitType.archer).Count;
+        //cavaleryEnemyCount = UnitsManager.instance.GetEnemyUnit(UnitType.cavalery).Count;
 
         if (cavaleryEnemyCount > meleeEnemyCount)
         {

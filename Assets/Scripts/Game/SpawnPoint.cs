@@ -30,7 +30,7 @@ public class SpawnPoint : MonoBehaviour
             {
                 Unit tempCh = Instantiate(itemPrefab, point.transform.position, point.transform.rotation);
                 tempCh.health.SetTeam(team);
-                UnitsManager.instance.AttachedUnit(tempCh);
+                //UnitsManager.instance.AttachedUnit(tempCh);
                 tempCh.Command = new FindEnemyCommand(tempCh);
 
                 currentTime = 0;
